@@ -76,7 +76,7 @@ Root allows homebrew and system customization. Changes to startup services or a 
 - `flake.nix`, `flake.lock`, `.envrc`: Nix/direnv environment.
 - `package.json`, `yarn.lock`: pinned LG webOS CLI.
 - `justfile`: common laptop commands.
-- `vendor/faultmanager-autoroot/`: reviewed script, provenance, and upstream license.
+- `vendor/faultmanager-autoroot/`: reviewed script, checksum, provenance, and upstream license.
 - [`docs/links.md`](docs/links.md): primary sources and future reference links.
 - [`docs/session-template.md`](docs/session-template.md): record for each TV work session.
 
