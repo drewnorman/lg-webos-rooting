@@ -1,6 +1,6 @@
 # LG 50UK6090PUA webOS rooting
 
-Working record and tooling for Drew's 50-inch 4K HDR LG 50UK6090PUA. The goals were to reduce advertising, improve responsiveness, and gain control over webOS. The TV reported firmware **05.50.70** before this work. The exact webOS version is still to be confirmed from the device.
+Working record and tooling for Drew's 50-inch 4K HDR LG 50UK6090PUA. The goals were to reduce advertising, improve responsiveness, and gain control over webOS. The TV reports firmware **05.50.70**, webOS TV Lite **4.4.3**, and SDK **4.4.0**.
 
 The selected method is [throwaway96/faultmanager-autoroot](https://github.com/throwaway96/faultmanager-autoroot). Its author says it roots supported webOS 4.0+ TVs and installs Homebrew Channel. Drew checked [CanI.RootMy.TV for this model and firmware](https://cani.rootmy.tv/?q=50UK6090PUA%2005.50.70) and reported that faultmanager lists `05.50.70` as the latest known rootable firmware. Recheck the actual TV firmware before running anything; firmware updates can change compatibility.
 
@@ -9,7 +9,8 @@ The selected method is [throwaway96/faultmanager-autoroot](https://github.com/th
 - LG developer account created. Developer Mode was enabled and paired with this NixOS laptop before rooting.
 - Pairing succeeded. LG's CLI reported model `50UK6090PUA`, SDK `4.4.0`, and firmware `05.50.70`.
 - The pinned faultmanager script reached `Rooting complete` and `Payload complete` on 2026-10-28. LG's Developer Mode app was uninstalled before restart. Homebrew Channel opened and loaded its catalog after restart; its Settings showed `Root status: OK`. See [`docs/sessions/2026-10-28.md`](docs/sessions/2026-10-28.md) for the session record.
-- Root SSH is enabled with a dedicated key, and Telnet is disabled. The obsolete Developer Mode CLI profile was replaced with `lg-root`. No replacement launcher, debloating package, or performance-related service changes have been made. No performance improvement has been measured.
+- Root SSH is enabled with a dedicated key, and Telnet is disabled. The obsolete Developer Mode CLI profile was replaced with `lg-root`. GlassHouse v0.128.1 is installed with its dashboard bound to TV loopback, and six individual ad/tracking settings were changed. No replacement launcher or broad service debloat has been enabled. No performance improvement has been measured. See the [GlassHouse session note](docs/sessions/2026-10-28-glasshouse.md).
+- [Home takeover and debloat review](docs/home-and-debloat-review-2026-10-28.md) compares current packages against this TV's older webOS TV Lite build.
 
 ## Working environment on the laptop
 
