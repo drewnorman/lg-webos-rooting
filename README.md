@@ -9,7 +9,7 @@ The selected method is [throwaway96/faultmanager-autoroot](https://github.com/th
 - LG developer account created. Developer Mode was enabled and paired with this NixOS laptop before rooting.
 - Pairing succeeded. LG's CLI reported model `50UK6090PUA`, SDK `4.4.0`, and firmware `05.50.70`.
 - The pinned faultmanager script reached `Rooting complete` and `Payload complete` on 2026-10-28. LG's Developer Mode app was uninstalled before restart. Homebrew Channel opened and loaded its catalog after restart; its Settings showed `Root status: OK`. See [`docs/sessions/2026-10-28.md`](docs/sessions/2026-10-28.md) for the session record.
-- No replacement launcher, debloating package, or service changes were selected for this session. No performance improvement has been measured.
+- Root SSH is enabled with a dedicated key, and Telnet is disabled. The obsolete Developer Mode CLI profile was replaced with `lg-root`. No replacement launcher, debloating package, or performance-related service changes have been made. No performance improvement has been measured.
 
 ## Working environment on the laptop
 
@@ -23,6 +23,35 @@ just verify         # check the vendored script hash
 
 The flake provides the command-line tools; `yarn install --frozen-lockfile --ignore-scripts` supplies LG's CLI from the lockfile. LG's [published CLI system requirements](https://webostv.developer.lge.com/develop/tools/cli-installation) list Ubuntu for Linux and recommend older Node releases. This NixOS setup is a local workflow, not an officially supported LG configuration.
 
+## Rooted TV access and measurements
+
+The TV is registered locally as webOS CLI device `lg-root` and SSH host `lg-webos`. The dedicated private key is `~/.ssh/lg_webos_root_50UK6090PUA`; its public key is installed on the TV in `/home/root/.ssh/authorized_keys`. The old Developer Mode profile, including its saved passphrase, was removed. Homebrew Channel's [rooted-device setup](https://github.com/webosbrew/webos-homebrew-channel/blob/main/README.md#configuring-webososeares-cli-with-rooted-tv) documents this key-based arrangement. After the second reboot, SSH key login worked, the known default root password was rejected, and Telnet port 23 remained closed.
+
+To recreate the laptop configuration, use a dedicated key whose public half is already authorized on the TV. Put the following stanza in `~/.ssh/config.local` (included by this laptop's `~/.ssh/config`), replacing `TV_IP` and the key filename if needed:
+
+```sshconfig
+Host lg-webos
+    HostName TV_IP
+    User root
+    IdentityFile ~/.ssh/lg_webos_root_50UK6090PUA
+    IdentitiesOnly yes
+    PasswordAuthentication no
+```
+
+Then register the CLI profile. The CLI's `privatekey` setting takes the **filename under `~/.ssh`**, not an absolute path:
+
+```bash
+yarn ares-setup-device -a lg-root -i username=root -i host=TV_IP -i port=22 -i privatekey=lg_webos_root_50UK6090PUA
+```
+
+```bash
+just info       # model, SDK, firmware
+just shell      # root shell through SSH
+just snapshot   # read-only memory, storage, load, and processes
+```
+
+Performance work starts with repeated measurements under the same conditions: wait several minutes after boot, leave the TV on Home, time Home and app launches with the remote, and record a `just snapshot` result. Repeat each timing a few times before and after one change. The snapshot is diagnostic context, not a benchmark by itself. Do not remove system packages or disable services based on a single busy process; first identify what it does and prepare a way to reverse the change.
+
 ## Historical Developer Mode pairing
 
 This records how the TV was paired **before rooting**. Developer Mode allowed sideloading without system-wide root; the initial handoff recorded a 1,000-hour session limit and possible removal of sideloaded apps when a session expired. Rooted Homebrew Channel avoids that renewal dependency.
@@ -31,9 +60,9 @@ On the unrooted TV, preparation was to disable automatic firmware updates and Qu
 
 These commands then ran **on the laptop**. Follow [LG's connection instructions](https://webostv.developer.lge.com/develop/getting-started/developer-mode-app).
 
-1. Run `just register` and choose **add**. Name the device `lg`, enter the TV's current IP address, port `9922`, SSH user `prisoner`, a blank password, and set it as the default device.
-2. Run `just key`. Enter the six-character, case-sensitive passphrase shown on the TV **at the local prompt**.
-3. Run `just info` and record the model, firmware, and SDK/webOS information in a session note.
+1. Run `yarn ares-setup-device` and choose **add**. Name the device `lg`, enter the TV's current IP address, port `9922`, SSH user `prisoner`, a blank password, and set it as the default device.
+2. Run `yarn ares-novacom --device lg --getkey`. Enter the six-character, case-sensitive passphrase shown on the TV **at the local prompt**.
+3. Run `yarn ares-device --device lg --system-info` and record the model, firmware, and SDK/webOS information in a session note.
 
 For a direct SSH shell, use the private key path reported by `ares-novacom --getkey`:
 

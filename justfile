@@ -14,14 +14,18 @@ check:
 verify:
     sha256sum -c vendor/faultmanager-autoroot/SHA256SUMS
 
-# Register the TV interactively. Use SSH port 9922 and user prisoner.
-register:
-    yarn ares-setup-device
+# Show configured webOS CLI devices.
+devices:
+    yarn ares-setup-device --list
 
-# Retrieve the Developer Mode SSH key. Enter the on-screen passphrase locally.
-key:
-    yarn ares-novacom --device lg --getkey
-
-# Confirm that the registered TV responds.
+# Confirm that the rooted TV responds.
 info:
-    yarn ares-device --device lg --system-info
+    yarn ares-device --device lg-root --system-info
+
+# Open a root shell through the dedicated key in ~/.ssh.
+shell:
+    ssh lg-webos
+
+# Read-only snapshot. Compare under the same idle or app workload.
+snapshot:
+    ssh -o BatchMode=yes lg-webos 'uptime; grep -E "^(MemTotal|MemAvailable|SwapTotal|SwapFree):" /proc/meminfo; df -h /var /media/developer /tmp; top -b -n 1 | head -20'
