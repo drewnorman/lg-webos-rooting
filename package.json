@@ -1,0 +1,17 @@
+{
+  "name": "lg-webos-rooting-tools",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "yarn@1.22.22",
+  "description": "Local CLI dependencies for LG webOS TV maintenance",
+  "scripts": {
+    "ares": "node ./node_modules/@webos-tools/cli/bin/ares.js",
+    "ares-config": "node ./node_modules/@webos-tools/cli/bin/ares-config.js",
+    "ares-device": "node ./node_modules/@webos-tools/cli/bin/ares-device.js",
+    "ares-novacom": "node ./node_modules/@webos-tools/cli/bin/ares-novacom.js",
+    "ares-setup-device": "node ./node_modules/@webos-tools/cli/bin/ares-setup-device.js"
+  },
+  "devDependencies": {
+    "@webos-tools/cli": "3.2.6"
+  }
+}

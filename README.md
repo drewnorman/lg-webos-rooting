@@ -20,7 +20,7 @@ just install        # install the pinned @webos-tools/cli dependency
 just check          # show CLI version
 ```
 
-The flake provides the command-line tools; `yarn install --frozen-lockfile` supplies LG's CLI from the lockfile. LG's [published CLI system requirements](https://webostv.developer.lge.com/develop/tools/cli-installation) list Ubuntu for Linux and recommend older Node releases. This NixOS setup is a local workflow, not an officially supported LG configuration.
+The flake provides the command-line tools; `yarn install --frozen-lockfile --ignore-scripts` supplies LG's CLI from the lockfile. LG's [published CLI system requirements](https://webostv.developer.lge.com/develop/tools/cli-installation) list Ubuntu for Linux and recommend older Node releases. This NixOS setup is a local workflow, not an officially supported LG configuration.
 
 ## Connect to Developer Mode
 

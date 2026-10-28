@@ -1,0 +1,14 @@
+node_modules/
+.direnv/
+.env
+.env.*
+!.env.example
+*.log
+
+# Keep device keys, pairing details, and downloaded payloads private.
+*.pem
+*.key
+id_*
+device.json
+secrets/
+downloads/
